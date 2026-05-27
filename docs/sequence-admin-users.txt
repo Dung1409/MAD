@@ -1,0 +1,119 @@
+@startuml
+actor Client as User
+
+boundary "ManageUsersListScreen" as ManageUsersList
+
+control "AdminUserController" as AdminUserController
+control "AdminUserService" as AdminUserService
+control "AdminBookingService" as AdminBookingService
+
+participant "UserRepository" as UserRepository
+participant "BookingRepository" as BookingRepository
+participant "DeletedUserArchiveRepository" as DeletedUserArchiveRepository
+participant "MovieRecommendationRepository" as MovieRecommendationRepository
+participant "UserMovieInteractionRepository" as UserMovieInteractionRepository
+participant "WatchHistoryRepository" as WatchHistoryRepository
+participant "UserGenrePreferenceRepository" as UserGenrePreferenceRepository
+
+entity "User" as UserModel
+entity "Booking" as Booking
+entity "DeletedUserArchive" as DeletedUserArchive
+
+== Xem danh sách người dùng ==
+User -> ManageUsersList : Mở danh sách người dùng
+ManageUsersList -> AdminUserController : GET /api/admin/users?search&role&status&loyaltyTier
+AdminUserController -> AdminUserService : getAllUsers(filters)
+AdminUserService -> UserRepository : findAll()
+UserRepository -> UserModel : Truy vấn User
+UserModel --> UserRepository : Danh sách User
+UserRepository --> AdminUserService : Danh sách User
+AdminUserService --> AdminUserController : Danh sách User
+AdminUserController --> ManageUsersList : Danh sách User
+ManageUsersList --> User : Hiển thị danh sách
+
+== Cập nhật vai trò ==
+User -> ManageUsersList : Chọn đổi vai trò
+ManageUsersList -> AdminUserController : PUT /api/admin/users/{id}/role?role=...
+AdminUserController -> AdminUserService : updateUserRole(id, role)
+AdminUserService -> UserRepository : findById(id)
+UserRepository -> UserModel : Truy vấn User
+UserModel --> UserRepository : User
+UserRepository --> AdminUserService : User
+AdminUserService -> UserRepository : save(user)
+UserRepository -> UserModel : Lưu User
+UserModel --> UserRepository : User đã cập nhật
+UserRepository --> AdminUserService : User
+AdminUserService --> AdminUserController : User
+AdminUserController --> ManageUsersList : UserResponse
+ManageUsersList --> User : Thông báo cập nhật
+
+== Cập nhật trạng thái ==
+User -> ManageUsersList : Chọn khóa/mở khóa
+ManageUsersList -> AdminUserController : PUT /api/admin/users/{id}/status?status=...
+AdminUserController -> AdminUserService : updateUserStatus(id, status)
+AdminUserService -> UserRepository : findById(id)
+UserRepository -> UserModel : Truy vấn User
+UserModel --> UserRepository : User
+UserRepository --> AdminUserService : User
+AdminUserService -> UserRepository : save(user)
+UserRepository -> UserModel : Lưu User
+UserModel --> UserRepository : User đã cập nhật
+UserRepository --> AdminUserService : User
+AdminUserService --> AdminUserController : User
+AdminUserController --> ManageUsersList : UserResponse
+ManageUsersList --> User : Thông báo cập nhật
+
+== Xem lịch sử đặt vé ==
+User -> ManageUsersList : Xem bookings của user
+ManageUsersList -> AdminUserController : GET /api/admin/users/{id}/bookings?status=...
+AdminUserController -> AdminBookingService : getAllBookings(status, userId, ...)
+AdminBookingService -> BookingRepository : findAll() / query by filters
+BookingRepository -> Booking : Truy vấn Booking
+Booking --> BookingRepository : Danh sách Booking
+BookingRepository --> AdminBookingService : Danh sách Booking
+AdminBookingService --> AdminUserController : BookingResponse list
+AdminUserController --> ManageUsersList : BookingResponse list
+ManageUsersList --> User : Hiển thị bookings
+
+== Xóa người dùng ==
+User -> ManageUsersList : Chọn xóa user
+ManageUsersList -> AdminUserController : DELETE /api/admin/users/{id}
+AdminUserController -> AdminUserService : deleteUserAndPreserveHistory(id)
+
+AdminUserService -> UserRepository : findById(id)
+UserRepository -> UserModel : Truy vấn User
+UserModel --> UserRepository : User
+UserRepository --> AdminUserService : User
+
+AdminUserService -> DeletedUserArchiveRepository : save(DeletedUserArchive)
+DeletedUserArchiveRepository -> DeletedUserArchive : Lưu archive
+DeletedUserArchive --> DeletedUserArchiveRepository : Đã lưu
+DeletedUserArchiveRepository --> AdminUserService : OK
+
+AdminUserService -> BookingRepository : findByUserIdOrderByCreatedAtAsc(id)
+BookingRepository -> Booking : Truy vấn Booking
+Booking --> BookingRepository : Danh sách Booking
+BookingRepository --> AdminUserService : Danh sách Booking
+AdminUserService -> BookingRepository : saveAll(bookings)
+BookingRepository -> Booking : Lưu snapshot
+Booking --> BookingRepository : Đã lưu
+BookingRepository --> AdminUserService : OK
+
+AdminUserService -> MovieRecommendationRepository : deleteByUser(user)
+MovieRecommendationRepository --> AdminUserService : OK
+AdminUserService -> UserMovieInteractionRepository : deleteByUser(user)
+UserMovieInteractionRepository --> AdminUserService : OK
+AdminUserService -> WatchHistoryRepository : deleteByUser(user)
+WatchHistoryRepository --> AdminUserService : OK
+AdminUserService -> UserGenrePreferenceRepository : deleteByUser(user)
+UserGenrePreferenceRepository --> AdminUserService : OK
+
+AdminUserService -> UserRepository : delete(user)
+UserRepository -> UserModel : Xóa User
+UserModel --> UserRepository : Đã xóa
+UserRepository --> AdminUserService : OK
+
+AdminUserService --> AdminUserController : OK
+AdminUserController --> ManageUsersList : 204 No Content
+ManageUsersList --> User : Xóa thành công
+@enduml
