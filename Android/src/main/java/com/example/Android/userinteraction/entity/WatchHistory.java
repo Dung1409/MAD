@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 /**
  * Thực thể lưu lịch sử xem phim của người dùng để phục vụ gợi ý.
  */

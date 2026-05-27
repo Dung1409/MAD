@@ -32,7 +32,7 @@ public class MovieController {
     MovieService movieService;
     RecommendationService recommendationService;
     RecommendationProducer recommendationProducer;
-    
+
     @GetMapping
     public ResponseEntity<MoviesListResponse> getAllMovies() {
         log.info("API request: GET /api/movies - Fetching all movies");
@@ -45,13 +45,13 @@ public class MovieController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<MovieResponse> getMovieById(@PathVariable Long id) {
         log.info("API request: GET /api/movies/{} - Fetching movie details", id);
         try {
             Optional<MovieResponse> movie = movieService.getMovieById(id);
-            
+
             if (movie.isPresent()) {
                 log.info("Movie found: {}", movie.get().getTitle());
                 return ResponseEntity.ok(movie.get());
@@ -64,7 +64,7 @@ public class MovieController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    
+
     @GetMapping("/search")
     public ResponseEntity<MoviesListResponse> searchMovies(@RequestParam String keyword) {
         log.info("API request: GET /api/movies/search?keyword={} - Searching movies", keyword);
@@ -73,9 +73,9 @@ public class MovieController {
                 log.warn("Empty search keyword provided");
                 return ResponseEntity.badRequest().build();
             }
-            
+
             MoviesListResponse response = movieService.searchMovies(keyword.trim());
-            log.info("Search completed: {} movies found for keyword '{}'", 
+            log.info("Search completed: {} movies found for keyword '{}'",
                     response.getTotalCount(), keyword);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class MovieController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    
+
     @GetMapping("/genre/{genre}")
     public ResponseEntity<MoviesListResponse> getMoviesByGenre(@PathVariable String genre) {
         log.info("API request: GET /api/movies/genre/{} - Fetching movies by genre", genre);
@@ -92,9 +92,9 @@ public class MovieController {
                 log.warn("Empty genre provided");
                 return ResponseEntity.badRequest().build();
             }
-            
+
             MoviesListResponse response = movieService.getMoviesByGenre(genre.trim());
-            log.info("Genre search completed: {} movies found for genre '{}'", 
+            log.info("Genre search completed: {} movies found for genre '{}'",
                     response.getTotalCount(), genre);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -102,7 +102,7 @@ public class MovieController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    
+
     @GetMapping("/featured")
     public ResponseEntity<MoviesListResponse> getFeaturedMovies() {
         log.info("API request: GET /api/movies/featured - Fetching featured movies");
@@ -138,5 +138,5 @@ public class MovieController {
 
         recommendationProducer.sendMovieSelectedEvent(req.getMovieId(), principal);
         return ResponseEntity.status(202).body("Movie selection accepted");
-    } 
+    }
 }

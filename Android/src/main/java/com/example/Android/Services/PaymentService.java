@@ -243,7 +243,8 @@ public class PaymentService {
         result.put("bookingStatus", booking.getStatus());
         result.put("paymentStatus", paymentStatus);
         result.put("isFinal", "SUCCESS".equalsIgnoreCase(paymentStatus) || "FAILED".equalsIgnoreCase(paymentStatus));
-        result.put("isSuccess", "SUCCESS".equalsIgnoreCase(paymentStatus) && "CONFIRMED".equalsIgnoreCase(booking.getStatus()));
+        result.put("isSuccess",
+                "SUCCESS".equalsIgnoreCase(paymentStatus) && "CONFIRMED".equalsIgnoreCase(booking.getStatus()));
         result.put("paidAt", payment == null ? null : payment.getPaidAt());
 
         return result;

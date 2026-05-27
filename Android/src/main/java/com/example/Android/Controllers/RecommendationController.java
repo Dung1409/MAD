@@ -22,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 /**
- * Controller gợi ý phim: cung cấp API lấy thể loại, lưu preference và trả danh sách gợi ý.
+ * Controller gợi ý phim: cung cấp API lấy thể loại, lưu preference và trả danh
+ * sách gợi ý.
  */
 @RestController
 @RequestMapping("/api/recommendations")
@@ -37,6 +37,7 @@ public class RecommendationController {
 
     /**
      * Lấy danh sách thể loại để người dùng chọn cho gợi ý.
+     * 
      * @return response chứa danh sách genre.
      */
     @GetMapping("/genres")
@@ -46,6 +47,7 @@ public class RecommendationController {
 
     /**
      * Lưu danh sách thể loại đã chọn và phát sự kiện gợi ý bất đồng bộ.
+     * 
      * @param req danh sách genre (id) do client gửi.
      * @return HTTP 202 nếu tiếp nhận, hoặc lỗi khi dữ liệu không hợp lệ.
      */
@@ -73,9 +75,9 @@ public class RecommendationController {
         return ResponseEntity.status(202).body("Genres Accept");
     }
 
-
     /**
      * Trả danh sách phim gợi ý theo hạn mức.
+     * 
      * @param limit số lượng phim gợi ý tối đa.
      * @return response chứa danh sách gợi ý (score/strategy kèm theo).
      */

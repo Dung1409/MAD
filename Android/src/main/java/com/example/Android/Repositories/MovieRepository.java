@@ -15,28 +15,27 @@ import com.example.Android.Models.Movie;
  */
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-    
+
     /**
      * Lấy phim theo id.
      */
     Optional<Movie> findById(Long id);
-    
+
     @Query("SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-           "OR LOWER(m.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    
+            "OR LOWER(m.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+
     List<Movie> findByKeyword(@Param("keyword") String keyword);
-    
+
     List<Movie> findAllByOrderByIdDesc();
-    
+
     List<Movie> findByGenreContainingIgnoreCase(String genre);
-    
+
     @Query("SELECT DISTINCT m FROM Movie m JOIN m.genres g WHERE LOWER(g.name) = LOWER(:genreName)")
     List<Movie> findByGenreName(@Param("genreName") String genreName);
-    
-    
+
     @Query("SELECT m FROM Movie m WHERE m.rating >= :minRating ORDER BY m.rating DESC")
     List<Movie> findByRatingGreaterThanEqual(@Param("minRating") Double minRating);
-    
+
     List<Movie> findByStatus(String status);
-    
+
 }

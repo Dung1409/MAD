@@ -59,6 +59,7 @@ public class RecommendationService {
 
     /**
      * Lấy toàn bộ thể loại dùng cho màn hình chọn preference.
+     * 
      * @return response chứa danh sách thể loại và thông tin trạng thái.
      */
     public ResponseEntity<GenresResponse> getAllGenres() {
@@ -79,8 +80,9 @@ public class RecommendationService {
 
     /**
      * Lưu danh sách thể loại đã chọn của người dùng.
+     * 
      * @param principal email hoặc id người dùng.
-     * @param genreIds danh sách id thể loại.
+     * @param genreIds  danh sách id thể loại.
      * @return thông báo trạng thái lưu.
      */
     @Transactional
@@ -142,8 +144,9 @@ public class RecommendationService {
 
     /**
      * Ghi nhận lịch sử xem phim và tạo tương tác cơ bản cho gợi ý.
+     * 
      * @param principal email hoặc id người dùng.
-     * @param movieId id phim được chọn.
+     * @param movieId   id phim được chọn.
      * @return thông báo trạng thái lưu.
      */
     @Transactional
@@ -180,8 +183,9 @@ public class RecommendationService {
 
     /**
      * Tạo danh sách gợi ý đồng bộ cho client theo mức ưu tiên dữ liệu.
+     * 
      * @param principal email hoặc id người dùng.
-     * @param limit số lượng gợi ý tối đa.
+     * @param limit     số lượng gợi ý tối đa.
      * @return danh sách phim gợi ý kèm score/strategy.
      */
     public ResponseEntity<RecommendationMoviesResponse> recommendMovies(String principal, Integer limit) {
@@ -221,8 +225,9 @@ public class RecommendationService {
 
     /**
      * Xử lý sự kiện bất đồng bộ: tính toán và lưu snapshot gợi ý vào DB.
+     * 
      * @param principal email hoặc id người dùng.
-     * @param limit số lượng gợi ý tối đa để lưu.
+     * @param limit     số lượng gợi ý tối đa để lưu.
      */
     @Transactional
     public void processRecommendationEvent(String principal, Integer limit) {
@@ -266,8 +271,9 @@ public class RecommendationService {
 
     /**
      * Tính gợi ý dựa trên lịch sử xem: tăng trọng số cho các thể loại đã xem.
+     * 
      * @param histories lịch sử xem của người dùng.
-     * @param limit số lượng gợi ý tối đa.
+     * @param limit     số lượng gợi ý tối đa.
      * @return danh sách phim gợi ý theo chiến lược lịch sử xem.
      */
     private List<RecommendedMovieItem> recommendFromWatchHistory(List<WatchHistory> histories, int limit) {
@@ -305,8 +311,9 @@ public class RecommendationService {
 
     /**
      * Tính gợi ý dựa trên tương tác: ưu tiên phim có điểm tương tác cao.
+     * 
      * @param interactions danh sách tương tác của người dùng.
-     * @param limit số lượng gợi ý tối đa.
+     * @param limit        số lượng gợi ý tối đa.
      * @return danh sách phim gợi ý theo chiến lược tương tác.
      */
     private List<RecommendedMovieItem> recommendFromInteractions(List<UserMovieInteraction> interactions, int limit) {
@@ -353,7 +360,8 @@ public class RecommendationService {
 
     /**
      * Fallback gợi ý theo preference thể loại khi không có lịch sử/tương tác.
-     * @param user người dùng hiện tại.
+     * 
+     * @param user  người dùng hiện tại.
      * @param limit số lượng gợi ý tối đa.
      * @return danh sách phim gợi ý theo thể loại đã chọn.
      */
@@ -377,14 +385,15 @@ public class RecommendationService {
         return buildRecommendationResult(candidateScore, "GENRE_FALLBACK", limit);
     }
 
-        /**
-         * Chuẩn hóa điểm, sắp xếp theo score và dựng DTO kết quả.
-         * @param candidateScore map movieId -> score.
-         * @param strategy tên chiến lược gợi ý.
-         * @param limit số lượng gợi ý tối đa.
-         * @return danh sách DTO đã sắp xếp theo score.
-         */
-        private List<RecommendedMovieItem> buildRecommendationResult(Map<Long, Double> candidateScore, String strategy,
+    /**
+     * Chuẩn hóa điểm, sắp xếp theo score và dựng DTO kết quả.
+     * 
+     * @param candidateScore map movieId -> score.
+     * @param strategy       tên chiến lược gợi ý.
+     * @param limit          số lượng gợi ý tối đa.
+     * @return danh sách DTO đã sắp xếp theo score.
+     */
+    private List<RecommendedMovieItem> buildRecommendationResult(Map<Long, Double> candidateScore, String strategy,
             int limit) {
         if (candidateScore.isEmpty()) {
             return List.of();
@@ -423,6 +432,7 @@ public class RecommendationService {
 
     /**
      * Chuyển principal (email hoặc id) thành đối tượng User.
+     * 
      * @param principal email hoặc id.
      * @return User hoặc null nếu không tìm thấy/không hợp lệ.
      */
@@ -446,10 +456,11 @@ public class RecommendationService {
 
     /**
      * Ghi nhận tương tác của người dùng với phim.
-     * @param principal email hoặc id người dùng.
-     * @param movieId id phim.
+     * 
+     * @param principal       email hoặc id người dùng.
+     * @param movieId         id phim.
      * @param interactionType loại tương tác (vd: MOVIE_SELECTED).
-     * @param score điểm tương tác.
+     * @param score           điểm tương tác.
      */
     @Transactional
     public void saveInteractionForMovie(String principal, Long movieId, String interactionType, int score) {
@@ -472,6 +483,7 @@ public class RecommendationService {
 
     /**
      * Ghi nhận tương tác từ đặt vé thành công để tăng trọng số gợi ý.
+     * 
      * @param booking booking đã được xác nhận.
      */
     @Transactional
@@ -485,9 +497,10 @@ public class RecommendationService {
 
     /**
      * Tạo bản ghi tương tác và lưu vào DB.
-     * @param user người dùng.
+     * 
+     * @param user  người dùng.
      * @param movie phim.
-     * @param type loại tương tác.
+     * @param type  loại tương tác.
      * @param score điểm tương tác.
      */
     private void saveInteraction(User user, Movie movie, String type, int score) {

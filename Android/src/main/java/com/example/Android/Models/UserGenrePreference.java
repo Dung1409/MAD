@@ -20,7 +20,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 /**
  * Thể loại ưa thích của người dùng, dùng làm fallback khi gợi ý.
  */

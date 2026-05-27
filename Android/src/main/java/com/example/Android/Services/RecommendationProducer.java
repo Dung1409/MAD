@@ -24,8 +24,9 @@ public class RecommendationProducer {
 
     /**
      * Phát sự kiện người dùng chọn thể loại.
+     * 
      * @param genreIds danh sách id thể loại.
-     * @param userId định danh người dùng.
+     * @param userId   định danh người dùng.
      */
     public void sendMessage(List<Long> genreIds, String userId) {
         Map<String, Object> message = new HashMap<>();
@@ -46,8 +47,9 @@ public class RecommendationProducer {
 
     /**
      * Phát sự kiện người dùng chọn phim.
+     * 
      * @param movieId id phim.
-     * @param userId định danh người dùng.
+     * @param userId  định danh người dùng.
      */
     public void sendMovieSelectedEvent(Long movieId, String userId) {
         Map<String, Object> message = new HashMap<>();

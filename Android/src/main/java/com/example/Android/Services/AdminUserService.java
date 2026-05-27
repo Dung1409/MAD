@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AdminUserService {
-    
+
     UserRepository userRepository;
     BookingRepository bookingRepository;
     DeletedUserArchiveRepository deletedUserArchiveRepository;
@@ -37,7 +37,7 @@ public class AdminUserService {
     MovieRecommendationRepository movieRecommendationRepository;
     UserGenrePreferenceRepository userGenrePreferenceRepository;
     private static final Set<String> ALLOWED_TIERS = Set.of("BRONZE", "SILVER", "GOLD");
-    
+
     public List<User> getAllUsers(String search, String role, String status, String loyaltyTier) {
         log.info("Fetching all users with filters - search: {}, role: {}, status: {}, loyaltyTier: {}",
                 search, role, status, loyaltyTier);
@@ -52,7 +52,7 @@ public class AdminUserService {
         }
 
         List<User> users = userRepository.findAll();
-        
+
         // Apply search filter
         if (!normalizedSearch.isEmpty()) {
             users = users.stream()
@@ -60,14 +60,14 @@ public class AdminUserService {
                             || (u.getEmail() != null && u.getEmail().toLowerCase().contains(normalizedSearch)))
                     .collect(Collectors.toList());
         }
-        
+
         // Apply role filter
         if (!normalizedRole.isEmpty()) {
             users = users.stream()
                     .filter(u -> normalizedRole.equalsIgnoreCase(u.getRole()))
                     .collect(Collectors.toList());
         }
-        
+
         // Apply status filter
         if (!normalizedStatus.isEmpty()) {
             users = users.stream()
@@ -81,45 +81,45 @@ public class AdminUserService {
                     .filter(u -> u.getLoyaltyTier() != null && normalizedTier.equalsIgnoreCase(u.getLoyaltyTier()))
                     .collect(Collectors.toList());
         }
-        
+
         log.info("Found {} users after filtering", users.size());
         return users;
     }
-    
+
     public User getUserById(Long id) {
         log.info("Fetching user with ID: {}", id);
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
     }
-    
+
     public User updateUserRole(Long id, String role) {
         log.info("Updating role for user {}: {}", id, role);
-        
+
         // Validate role
         if (!role.equals("USER") && !role.equals("ADMIN")) {
             throw new RuntimeException("Invalid role. Must be USER or ADMIN");
         }
-        
+
         User user = getUserById(id);
         user.setRole(role);
         User updatedUser = userRepository.save(user);
-        
+
         log.info("User role updated successfully: {} -> {}", id, role);
         return updatedUser;
     }
-    
+
     public User updateUserStatus(Long id, String status) {
         log.info("Updating status for user {}: {}", id, status);
-        
+
         // Validate status
         if (!status.equals("ACTIVE") && !status.equals("BLOCKED")) {
             throw new RuntimeException("Invalid status. Must be ACTIVE or BLOCKED");
         }
-        
+
         User user = getUserById(id);
         user.setStatus(status);
         User updatedUser = userRepository.save(user);
-        
+
         log.info("User status updated successfully: {} -> {}", id, status);
         return updatedUser;
     }

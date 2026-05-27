@@ -19,6 +19,7 @@ public class RecommendationConsumer {
 
     /**
      * Nhận message từ queue, parse dữ liệu và gọi xử lý gợi ý.
+     * 
      * @param message payload map từ RabbitMQ.
      */
     @RabbitListener(queues = "recommendationQueue")

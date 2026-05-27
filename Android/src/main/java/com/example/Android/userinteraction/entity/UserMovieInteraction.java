@@ -59,7 +59,7 @@ public class UserMovieInteraction {
     private Integer score;
 
     /**
-     * Thời điểm tạo tương tác (tự động). 
+     * Thời điểm tạo tương tác (tự động).
      */
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
