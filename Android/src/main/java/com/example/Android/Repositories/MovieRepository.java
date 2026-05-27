@@ -10,9 +10,15 @@ import org.springframework.stereotype.Repository;
 
 import com.example.Android.Models.Movie;
 
+/**
+ * Repository truy xuất phim; được dùng để lấy chi tiết phim khi dựng gợi ý.
+ */
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     
+    /**
+     * Lấy phim theo id.
+     */
     Optional<Movie> findById(Long id);
     
     @Query("SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +

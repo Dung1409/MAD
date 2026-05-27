@@ -15,12 +15,14 @@ import { movieService } from '../../services/movieService';
 
 const FALLBACK_POSTER = 'https://via.placeholder.com/400x600?text=Movie';
 
+// Chuẩn hóa response để đảm bảo danh sách phim gợi ý luôn là array.
 const normalizeRecommendations = (payload) => {
   if (Array.isArray(payload?.movies)) return payload.movies;
   if (Array.isArray(payload)) return payload;
   return [];
 };
 
+// Màn hình gợi ý phim: lấy danh sách gợi ý + thể loại lọc phù hợp từ backend.
 const RecommendScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
@@ -29,6 +31,7 @@ const RecommendScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
+  // Tải danh sách gợi ý, đồng thời bổ sung chi tiết phim từ /api/movies/{id}.
   const loadRecommendations = useCallback(async () => {
     try {
       const recommendationResponse = await movieService.getRecommendedMovies(10);
@@ -64,6 +67,7 @@ const RecommendScreen = ({ navigation }) => {
     }
   }, []);
 
+  // Tải thể loại gợi ý và danh sách phim (có hỗ trợ refresh).
   const loadScreenData = useCallback(
     async (showFullLoader = false) => {
       try {
@@ -100,6 +104,7 @@ const RecommendScreen = ({ navigation }) => {
     }, [loadScreenData])
   );
 
+  // Lọc danh sách gợi ý theo thể loại đã chọn trên UI.
   const filteredMovies = useMemo(() => {
     if (selectedGenreId === 'all') {
       return [...movies];
@@ -112,12 +117,14 @@ const RecommendScreen = ({ navigation }) => {
   const featuredMovie = filteredMovies[0];
   const recommendedList = filteredMovies.slice(1);
 
+  // Chuyển điểm gợi ý sang phần trăm match để hiển thị.
   const getMatchPercent = (movie) => {
     const score = Number(movie?.score || 0);
     if (score <= 0) return 70;
     return Math.max(70, Math.min(99, Math.round(score * 100)));
   };
 
+  // Định dạng thời lượng phim để hiển thị trên card.
   const formatDuration = (duration) => {
     const mins = Number(duration || 0);
     if (!mins) return 'N/A';
@@ -126,11 +133,13 @@ const RecommendScreen = ({ navigation }) => {
     return `${hours}h${remain ? `${remain}m` : ''}`;
   };
 
+  // Ghi nhận thao tác xem phim để cập nhật tương tác, sau đó mở chi tiết.
   const openMovieDetail = (movie) => {
     movieService.selectMovieForRecommendation(movie.id).catch(() => {});
     navigation.navigate('MovieDetail', { movieId: movie.id, movie });
   };
 
+  // Cập nhật preference thể loại (nếu có) và tải lại danh sách gợi ý.
   const handleGenrePress = async (genreId) => {
     try {
       setSelectedGenreId(genreId);

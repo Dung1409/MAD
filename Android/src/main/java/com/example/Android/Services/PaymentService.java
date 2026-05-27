@@ -131,6 +131,7 @@ public class PaymentService {
 
                 booking.setStatus("CONFIRMED");
                 bookingRepository.save(booking);
+                // Ghi nhận tương tác đặt vé để tăng điểm gợi ý.
                 recommendationService.saveBookingInteraction(booking);
 
                 showtimeSeats.forEach(seat -> seat.setStatus("BOOKED"));
@@ -206,6 +207,7 @@ public class PaymentService {
 
             booking.setStatus("CONFIRMED");
             bookingRepository.save(booking);
+            // Ghi nhận tương tác đặt vé để tăng điểm gợi ý.
             recommendationService.saveBookingInteraction(booking);
 
             showtimeSeats.forEach(seat -> seat.setStatus("BOOKED"));

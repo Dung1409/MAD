@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+/**
+ * Controller gợi ý phim: cung cấp API lấy thể loại, lưu preference và trả danh sách gợi ý.
+ */
 @RestController
 @RequestMapping("/api/recommendations")
 @RequiredArgsConstructor
@@ -32,11 +35,20 @@ public class RecommendationController {
     RecommendationService recommendationService;
     RecommendationProducer recommendationProducer;
 
+    /**
+     * Lấy danh sách thể loại để người dùng chọn cho gợi ý.
+     * @return response chứa danh sách genre.
+     */
     @GetMapping("/genres")
     public ResponseEntity<?> getGenres() {
         return recommendationService.getAllGenres();
     }
 
+    /**
+     * Lưu danh sách thể loại đã chọn và phát sự kiện gợi ý bất đồng bộ.
+     * @param req danh sách genre (id) do client gửi.
+     * @return HTTP 202 nếu tiếp nhận, hoặc lỗi khi dữ liệu không hợp lệ.
+     */
     @PostMapping("/select/genres")
     public ResponseEntity<?> selectGenres(@RequestBody GenresSelectReq req) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,6 +74,11 @@ public class RecommendationController {
     }
 
 
+    /**
+     * Trả danh sách phim gợi ý theo hạn mức.
+     * @param limit số lượng phim gợi ý tối đa.
+     * @return response chứa danh sách gợi ý (score/strategy kèm theo).
+     */
     @GetMapping("/movies")
     public ResponseEntity<?> getRecommendations(@RequestParam(defaultValue = "10") Integer limit) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();

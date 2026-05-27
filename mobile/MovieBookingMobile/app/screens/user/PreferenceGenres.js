@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { movieService } from '../../services/movieService';
 
+// Màn hình chọn thể loại yêu thích để phục vụ gợi ý phim.
 const PreferenceGenres = ({ navigation }) => {
   const [genres, setGenres] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -19,6 +20,7 @@ const PreferenceGenres = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // Tải danh sách thể loại để người dùng chọn (có hỗ trợ refresh).
   const loadGenres = useCallback(
     async (showLoader = false) => {
       try {
@@ -49,16 +51,19 @@ const PreferenceGenres = ({ navigation }) => {
     loadGenres(true);
   }, [loadGenres]);
 
+  // Bật/tắt thể loại đã chọn trong danh sách.
   const toggleGenre = (genreId) => {
     setSelectedIds((prev) =>
       prev.includes(genreId) ? prev.filter((id) => id !== genreId) : [...prev, genreId]
     );
   };
 
+  // Xóa nhanh tất cả lựa chọn thể loại.
   const handleClear = () => {
     setSelectedIds([]);
   };
 
+  // Lưu preference thể loại lên backend để tạo gợi ý.
   const handleSave = async () => {
     if (!selectedIds.length) {
       Alert.alert('Notice', 'Please select at least one genre.');
@@ -77,6 +82,7 @@ const PreferenceGenres = ({ navigation }) => {
     }
   };
 
+  // Hiển thị nhãn đếm số thể loại đã chọn.
   const selectedCountLabel = useMemo(() => {
     if (!selectedIds.length) return 'No genres selected';
     if (selectedIds.length === 1) return '1 genre selected';

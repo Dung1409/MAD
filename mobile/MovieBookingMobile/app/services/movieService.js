@@ -1,5 +1,6 @@
 import { apiClient } from './apiClient';
 
+// Nhóm API phim, trong đó có các endpoint hỗ trợ luồng gợi ý.
 export const movieService = {
   getAllMovies: async (params = {}) => {
     try {
@@ -55,6 +56,10 @@ export const movieService = {
     }
   },
 
+  /**
+  * Lấy danh sách thể loại để người dùng chọn làm dữ liệu gợi ý.
+  * Output: response.data từ /api/recommendations/genres.
+   */
   getRecommendationGenres: async () => {
     try {
       const response = await apiClient.get('/api/recommendations/genres');
@@ -65,6 +70,10 @@ export const movieService = {
     }
   },
 
+  /**
+  * Gửi các thể loại người dùng đã chọn lên server để lưu preference.
+  * Input: danh sách id thể loại; Output: response.data từ /api/recommendations/select/genres.
+   */
   selectRecommendationGenres: async (genreIds = []) => {
     try {
       const body = {
@@ -78,6 +87,10 @@ export const movieService = {
     }
   },
 
+  /**
+  * Lấy danh sách phim gợi ý theo hạn mức.
+  * Output: response.data từ /api/recommendations/movies.
+   */
   getRecommendedMovies: async (limit = 10) => {
     try {
       const response = await apiClient.get('/api/recommendations/movies', {
@@ -90,6 +103,10 @@ export const movieService = {
     }
   },
 
+  /**
+  * Thông báo server về phim người dùng vừa xem/nhấn, để cập nhật tương tác.
+  * Tác dụng phụ: ghi history + tương tác (backend) và có thể phát sự kiện gợi ý.
+   */
   selectMovieForRecommendation: async (movieId) => {
     try {
       const response = await apiClient.post('/api/movies/select', { movieId });

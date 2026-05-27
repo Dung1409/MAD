@@ -7,6 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * DTO response cho danh sách phim gợi ý.
+ */
 @SuperBuilder
 @Data
 @EqualsAndHashCode(callSuper = true)

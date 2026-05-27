@@ -15,6 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Bảng mapping giữa movie và genre, dùng để tính điểm gợi ý theo thể loại.
+ */
 @Entity
 @Table(name = "movie_genres", uniqueConstraints = {
         @UniqueConstraint(name = "uq_movie_genre", columnNames = { "movie_id", "genre_id" })

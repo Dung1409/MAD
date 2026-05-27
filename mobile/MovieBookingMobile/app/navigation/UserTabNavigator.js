@@ -46,6 +46,7 @@ export default function UserTabNavigator() {
         options={{
           headerShown: false,
           tabBarLabel: 'Suggestions',
+          // Tab dành cho màn hình gợi ý phim.
           tabBarIcon: ({ color, size }) => (
             <Icon name="lightbulb-on" size={size} color={color} />
           ),

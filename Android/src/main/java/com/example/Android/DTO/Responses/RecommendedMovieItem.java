@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO item cho phim gợi ý: kèm điểm và chiến lược sinh ra.
+ */
 @Data
 @Builder
 @NoArgsConstructor

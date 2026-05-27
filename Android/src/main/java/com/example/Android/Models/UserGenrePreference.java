@@ -21,9 +21,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-/*
-    Map table từ bảng user_genre_preferences sang java code
-    Lưu thể loại yêu thích của người dùng sau lần đăng nhập đầu tiên
+/**
+ * Thể loại ưa thích của người dùng, dùng làm fallback khi gợi ý.
  */
 @Entity
 @Table(name = "user_genre_preferences", uniqueConstraints = {
@@ -47,6 +46,9 @@ public class UserGenrePreference {
     @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
+    /**
+     * Thời điểm ghi nhận preference.
+     */
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

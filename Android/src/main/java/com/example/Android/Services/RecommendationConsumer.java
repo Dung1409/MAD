@@ -8,12 +8,19 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Consumer nhận message gợi ý và kích hoạt xử lý tạo snapshot.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class RecommendationConsumer {
     private final RecommendationService recommendationService;
 
+    /**
+     * Nhận message từ queue, parse dữ liệu và gọi xử lý gợi ý.
+     * @param message payload map từ RabbitMQ.
+     */
     @RabbitListener(queues = "recommendationQueue")
     public void receiveMessage(Map<String, Object> message) {
         String userId = asString(message.get("userId"));
@@ -35,6 +42,9 @@ public class RecommendationConsumer {
         }
     }
 
+    /**
+     * Chuyển object sang chuỗi an toàn.
+     */
     private String asString(Object value) {
         if (value == null) {
             return null;
@@ -42,6 +52,9 @@ public class RecommendationConsumer {
         return String.valueOf(value);
     }
 
+    /**
+     * Chuyển object sang số nguyên an toàn, fallback mặc định khi lỗi.
+     */
     private Integer asInteger(Object value, int defaultValue) {
         if (value == null) {
             return defaultValue;

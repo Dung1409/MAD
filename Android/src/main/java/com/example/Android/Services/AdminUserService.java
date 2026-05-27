@@ -150,6 +150,7 @@ public class AdminUserService {
         }
         bookingRepository.saveAll(userBookings);
 
+        // Xóa dữ liệu gợi ý/tương tác của user khi xóa tài khoản.
         movieRecommendationRepository.deleteByUser(user);
         userMovieInteractionRepository.deleteByUser(user);
         watchHistoryRepository.deleteByUser(user);

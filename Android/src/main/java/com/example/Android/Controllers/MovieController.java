@@ -117,6 +117,10 @@ public class MovieController {
         }
     }
 
+    /**
+     * Ghi nhận người dùng đã chọn/xem phim để phục vụ gợi ý.
+     * Tác dụng phụ: lưu watch_history, tạo tương tác và phát sự kiện gợi ý.
+     */
     @PostMapping("/select")
     public ResponseEntity<?> selectMovie(@RequestBody MovieSelectReq req, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {

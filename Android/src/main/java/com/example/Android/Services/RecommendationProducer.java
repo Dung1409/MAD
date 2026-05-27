@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Producer phát sự kiện gợi ý sang RabbitMQ để xử lý bất đồng bộ.
+ */
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
@@ -19,6 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 public class RecommendationProducer {
     RabbitTemplate rabbitTemplate;
 
+    /**
+     * Phát sự kiện người dùng chọn thể loại.
+     * @param genreIds danh sách id thể loại.
+     * @param userId định danh người dùng.
+     */
     public void sendMessage(List<Long> genreIds, String userId) {
         Map<String, Object> message = new HashMap<>();
         message.put("genreIds", genreIds);
@@ -36,6 +44,11 @@ public class RecommendationProducer {
         }
     }
 
+    /**
+     * Phát sự kiện người dùng chọn phim.
+     * @param movieId id phim.
+     * @param userId định danh người dùng.
+     */
     public void sendMovieSelectedEvent(Long movieId, String userId) {
         Map<String, Object> message = new HashMap<>();
         message.put("movieId", movieId);

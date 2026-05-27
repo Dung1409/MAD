@@ -81,6 +81,7 @@ export default function UserStack() {
           headerShown: false,
         }}
       />
+      // Màn hình chọn thể loại yêu thích để phục vụ gợi ý.
       <Stack.Screen
         name="PreferenceGenres"
         component={PreferenceGenres}

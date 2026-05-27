@@ -21,11 +21,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/* 
-    Map dữ liệu từ bảng user_movie_interactions sang java code 
-    Lưu hành vi của người dùng: xem - 2điểm, đặt vé - 5 điểm
-    */
-
+/**
+ * Thực thể lưu tương tác người dùng - phim phục vụ gợi ý.
+ * Ví dụ: MOVIE_SELECTED (2 điểm), BOOKING_CONFIRMED (5 điểm).
+ */
 @Entity
 @Table(name = "user_movie_interactions")
 @Getter
@@ -47,12 +46,21 @@ public class UserMovieInteraction {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    /**
+     * Loại tương tác (chuỗi mô tả hành vi).
+     */
     @Column(name = "type", length = 30)
     private String type;
 
+    /**
+     * Điểm tương tác dùng để tính trọng số gợi ý.
+     */
     @Column(name = "score")
     private Integer score;
 
+    /**
+     * Thời điểm tạo tương tác (tự động). 
+     */
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

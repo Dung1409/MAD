@@ -9,16 +9,25 @@ import org.springframework.amqp.core.Queue;
 @Configuration
 public class RabbitConfig {
 
+    /**
+     * Queue nhận sự kiện gợi ý phim.
+     */
     @Bean
     public Queue queue() {
         return new Queue("recommendationQueue", false);
     }
 
+    /**
+     * Exchange cho các message gợi ý phim.
+     */
     @Bean
     public DirectExchange exchange() {
         return new DirectExchange("recommendationExchange");
     }
 
+    /**
+     * Binding route message gợi ý vào queue.
+     */
     @Bean
     public org.springframework.amqp.core.Binding binding(Queue queue, DirectExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("recommendationRoutingKey");

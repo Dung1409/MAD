@@ -19,6 +19,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Thực thể lưu snapshot gợi ý: mỗi record là một phim được đề xuất cho user.
+ */
 @Entity
 @Table(name = "movie_recommendations")
 @Getter
@@ -40,6 +43,9 @@ public class MovieRecommendation {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    /**
+     * Điểm gợi ý đã tính toán (dùng để sắp xếp).
+     */
     @Column(name = "score", precision = 10, scale = 2)
     private BigDecimal score;
 }

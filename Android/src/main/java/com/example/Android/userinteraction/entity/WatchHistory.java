@@ -18,9 +18,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-/*
-    Map bảng watch_history sang java code
-    Bảng này lưu lịch sử xem của người dùng
+/**
+ * Thực thể lưu lịch sử xem phim của người dùng để phục vụ gợi ý.
  */
 @Entity
 @Table(name = "watch_history")
@@ -43,6 +42,9 @@ public class WatchHistory {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    /**
+     * Thời điểm xem phim.
+     */
     @Column(name = "watched_at")
     private LocalDateTime watchedAt;
 }

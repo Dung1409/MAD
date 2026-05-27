@@ -204,6 +204,7 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
+  // Gửi sự kiện chọn phim để backend ghi nhận tương tác gợi ý.
   const handleMoviePress = (movie) => {
     movieService.selectMovieForRecommendation(movie.id).catch(() => {});
     navigation.navigate('MovieDetail', { movieId: movie.id, movie });
